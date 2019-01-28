@@ -1,0 +1,89 @@
+{# on va mettre dans ce fichier, tout ce qui est commun à toutes nos pages#}
+
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Demoliq!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/open-sans.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+        <link rel="icon" href="{{ asset('img/FvD.png') }}"/>
+
+    </head>
+    <body>
+
+
+    <div class="container">
+
+        <header>
+            <div class="header">
+                <div class="logo"><a href="{{ path('home') }}"><img src="{{ asset('img/FvD.png') }}"/></a></div>
+            <div class="organisation"><h1>DemoLiquid</h1></div>
+            </div>
+
+        </header>
+
+        {#souvent la balise main contient le contenu qui va changer à chaque page#}
+        <main>
+        {% block content %}{% endblock %}
+        </main>
+
+        <footer class="page-footer font-small indigo">
+
+            <!-- Footer Links -->
+
+
+                <!-- Grid row-->
+                <div class="row text-center d-flex justify-content-center pt-2 ">
+
+                    <!-- Grid column -->
+                    <div class="col-md-2 mb-3">
+                        <h6 class="text-uppercase font-weight-bold">
+                            <a href="{{ path('home') }}">Accueil</a>
+                        </h6>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-2 mb-3">
+                        <h6 class="text-uppercase font-weight-bold">
+                            <a href="{{ path('faq') }}">FAQ</a>
+                        </h6>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-2 mb-3">
+                        <h6 class="text-uppercase font-weight-bold">
+                            <a href="{{ path('cgu') }}">CGU</a>
+                        </h6>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-2 mb-3">
+                        <h6 class="text-uppercase font-weight-bold">
+                            <a href="{{ path('how-it-works') }}">Fonctionnement</a>
+                        </h6>
+                    </div>
+                    <!-- Grid column -->
+
+
+
+                </div>
+
+        </footer>
+
+
+    </div>
+
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+
+    </body>
+</html>

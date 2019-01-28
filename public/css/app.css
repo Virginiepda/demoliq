@@ -1,0 +1,43 @@
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    font-family: "Open Sans";
+}
+
+
+.header{
+    display:flex;
+    height:110px;
+    border-bottom:3px solid #841717;
+    width:100%;
+}
+
+div.logo{
+    width:70px;
+    margin:auto;
+}
+
+div.organisation{
+    width:90%;
+    text-align: center;
+    margin:auto;
+}
+
+img{
+    width:70px;
+}
+
+footer{
+    border-top:3px solid #841717;
+    position:fixed;
+    bottom:0;
+    left:87.5px;
+    right:87.5px;
+}
+
+a{
+    text-decoration: none;
+    color:black;
+}
