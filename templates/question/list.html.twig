@@ -9,12 +9,14 @@
         <tr>
             <th>Question</th>
             <th>Appuis</th>
+            <th>Date</th>
             <th>Actions</th>
         </tr>
             {% for question in questions %}
         <tr>
         <td>{{ question.title }}</td>
             <td>{{ question.supports }}</td>
+            <td>{{ question.creationDate|date('d-m-Y H:i:s') }}</td>
             <td><a class="btn btn-secondary" href="#">Débattre</a></td>
         </tr>
         {% endfor %}
