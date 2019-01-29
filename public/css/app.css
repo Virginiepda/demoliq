@@ -28,6 +28,10 @@ nav.nav a:hover{
     color:#841717;
 }
 
+tr{
+    border-bottom:1px solid rgba(132,23,23,0.5) ;
+}
+
 div.logo{
     width:70px;
     margin:auto;
@@ -54,4 +58,9 @@ footer{
 a{
     text-decoration: none;
     color:black;
+}
+
+div.question{
+    padding:40px;
+    border-bottom:1px solid rgba(132,23,23,0.5)
 }

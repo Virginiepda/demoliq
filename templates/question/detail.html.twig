@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+ {% block title %}DemoLiquide | Les questions à débattre{% endblock %}
+
+{% block content %}
+
+    <div class="question">
+        <div>
+
+    <h3>{{ question.title }}</h3>
+            <p class="date">Date de création:</p>
+            <p>{{ question.creationDate |date('d-m-Y H:i:s') }}</p>
+            <p>Description:</p>
+            <p>{{ question.description }}</p>
+            <p class="supports">Supports:</p>
+            <p>{{ question.supports }}</p>
+    </div>
+    <div>
+        <a href="#" class="btn btn-secondary">Voter</a>
+    </div>
+    </div>
+
+
+{% endblock %}
