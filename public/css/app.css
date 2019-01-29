@@ -10,8 +10,22 @@ body{
 .header{
     display:flex;
     height:110px;
-    border-bottom:3px solid #841717;
+    /*border-bottom:2px solid #841717;*/
     width:100%;
+}
+
+nav.nav{
+    background-color:#841717;
+}
+
+nav.nav a{
+    color:white;
+    font-weight: bold;
+}
+
+nav.nav a:hover{
+    background-color: white;
+    color:#841717;
 }
 
 div.logo{
@@ -30,7 +44,7 @@ img{
 }
 
 footer{
-    border-top:3px solid #841717;
+    border-top:2px solid #841717;
     position:fixed;
     bottom:0;
     left:87.5px;
