@@ -6,4 +6,32 @@
 
     <h1>Ajoutez votre question</h1>
 
+    {#un formulaire est associé à une entité , dans notre cas, le formulaire est relié à l'entité Question
+    Quand on soumet le formulaire, Symfony hydrate automatiquement les champs du formulaire
+    en fonction du type choisi pour l'input, on va automatiquement avoir soit un check-box, liste déroulante, radio button, ...
+    #}
+
+    {#pour générer un beau formulaire, notamment en bootstrap, il faut activer le theme
+    on va dans le fichier config/packages/twig.yaml
+    on y indique le theme choisi (ATTENTION A L'INDENTATION!!!)
+
+    on peut aussi modifier le form uniquement avec le css en utilisant les class et id déjà mentionnés
+    #}
+
+    {#pour ajouter un bouton à mon formulaire, on peut décomposer les champs  #}
+
+    {#ouvre la balise form#}
+    {{ form_start(questionForm) }}
+
+    {#affiche les champs du formulaire#}
+    {{ form_widget(questionForm, {'attr':
+        {'novalidate':'novalidate'}}) }}
+    <button class="btn btn-info">Envoyer !</button>
+    {#ferme la balise form#}
+    {{ form_end(questionForm) }}
+
+    {{ form(questionForm) }}
+
+
+
 {% endblock %}

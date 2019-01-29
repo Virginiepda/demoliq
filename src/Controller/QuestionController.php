@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Form\QuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
@@ -81,6 +83,7 @@ class QuestionController extends AbstractController
 
     }
 
+
     /**
      * @Route(
      *     "/questions/ajouter",
@@ -88,33 +91,45 @@ class QuestionController extends AbstractController
      *     methods={"GET", "POST"}
      * )
      */
-
-    public function create()
+    public function create(Request $request)
     {
         //ça crée une instance de Question, ça hydrate la classe et ça renvoie ensuite en BDD
         $question = new Question();
 
-        //on hydrate la question
-        $question->setTitle('title');
-        $question->setDescription('jsdoij');
-        $question->setStatus('debating');
-        $question->setSupports('124');
-        //comme il attend de recevoir un datetime, on implémente alors un objet datetime, je lui mets un \ pour qu'il
-        //aille chercher la classe à la racine
-        $question->setCreationDate(new \DateTime());
+        //on créée une instance du formulaire, on lui passe déjà la question vide en attribut,
+        //comme ça, il sait déjà où chercher et où afficher les données
 
-        //on sauvegarde ensuite en BDD
-        //on va chercher l'EntityManager
-        $em = $this->getDoctrine()->getManager();  //on peut aussi le passer en argument de la fonction
-                                                    //public function create (EntityManager Manager)
-        //on demande ensuite à Doctrine de sauvegarder
-        $em ->persist($question);
-        //on execute la requête
-        $em->flush();
+        $questionForm = $this->createForm(QuestionType::class, $question);
+
+        //on hydrate les données du formulaire dans la bdd
+
+        $questionForm->handleRequest($request);
+
+        if($questionForm->isSubmitted() && $questionForm->isValid()){
+            //on va chercher l'EntityManager
+            $em = $this->getDoctrine()->getManager();  //on peut aussi le passer en argument de la fonction
+            //public function create (EntityManager Manager)
+            //on demande ensuite à Doctrine de sauvegarder
+            $em ->persist($question);
+            //on execute la requête
+            $em->flush();
+
+            //On créée un message flash à afficher sur la prochaine page indiquant que tout s'est bien passé
+            //deux arguments - le label et le message
+
+            $this->addFlash('info', 'Merci pour votre participation !');
+
+            //on redirige (deux arguments : nom de la route et la valeur de l'argument que la route prend
+            return $this->redirectToRoute('question_detail', ['id'=> $question->getId()] );
+
+
+            //il faut maintenant penser à indiquer où le message doit être affiché.
+            //dans notre cas, le mettre dans base.html.twig est tout indiqué
+        }
 
 
         return $this->render('question/create.html.twig', [
-
+                'questionForm' =>$questionForm->createView()
         ]);
 
 
