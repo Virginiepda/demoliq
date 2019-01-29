@@ -11,9 +11,13 @@
             <th>Appuis</th>
             <th>Actions</th>
         </tr>
+            {% for question in questions %}
         <tr>
-            <th>{{  }}</th>
+        <td>{{ question.title }}</td>
+            <td>{{ question.supports }}</td>
+            <td><a class="btn btn-secondary" href="#">Débattre</a></td>
         </tr>
+        {% endfor %}
     </table>
 
 {% endblock %}
