@@ -48,6 +48,20 @@ img{
     width:70px;
 }
 
+p{
+    font-size: 14px;
+}
+
+h5{
+    font-style: italic;
+}
+
+/*label{*/
+    /*font-size: 18px;*/
+    /*font-weight: bold;*/
+    /*color:#841717;*/
+/*}*/
+
 footer{
     border-top:2px solid #841717;
     position:fixed;
@@ -61,7 +75,7 @@ a{
     color:black;
 }
 
-div.question, form{
+div.question{
 
     border-bottom:1px solid rgba(132,23,23,0.5)
 }
@@ -73,4 +87,31 @@ div.question, div.message-form, div.messages{
 
 form{
     padding-bottom: 40px;
+}
+
+div#question_subjects{
+    display:flex;
+    flex-wrap: wrap;
+}
+
+div.form-check{
+    width:30%;
+    margin:5px 10px;
+}
+
+label.form-check-label{
+    font-size:13px;
+}
+
+td{
+    font-size: 14px;
+}
+
+img.marteau{
+    width:30px;
+    margin-right:10px;
+}
+
+div.message{
+    padding-bottom:20px;
 }

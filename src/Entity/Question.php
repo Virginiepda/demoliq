@@ -35,6 +35,7 @@ class Question
         $this->setSupports(0);
         $this->setStatus('debating');
         $this->messages = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
 
@@ -96,6 +97,11 @@ class Question
      * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="question", orphanRemoval=true)
      */
     private $messages;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Subject", inversedBy="questions")
+     */
+    private $subjects;
 
 
 
@@ -190,6 +196,32 @@ class Question
             if ($message->getQuestion() === $this) {
                 $message->setQuestion(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subject[]
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): self
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects[] = $subject;
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): self
+    {
+        if ($this->subjects->contains($subject)) {
+            $this->subjects->removeElement($subject);
         }
 
         return $this;

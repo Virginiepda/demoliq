@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Question;
+use App\Entity\Subject;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,8 +41,44 @@ class FixCommand extends Command
         $conn->query('SET FOREIGN_KEY_CHECKS = 0');
         $conn->query('TRUNCATE question');
         $conn->query('TRUNCATE message');
+        $conn->query('TRUNCATE subject');
+        $conn->query('TRUNCATE question_subject');
 
         $conn->query('SET FOREIGN_KEY_CHECKS = 1');
+
+        $subjects = [
+            "Affaires étrangères",
+            "Affaires européennes",
+            "Agriculture, alimentation, pêche",
+            "Ruralité",
+            "Aménagement du territoire",
+            "Économie et finance",
+            "Culture",
+            "Communication",
+            "Défense",
+            "Écologie et développement durable",
+            "Transports",
+            "Logement",
+            "Éducation",
+            "Intérieur",
+            "Outre-mer et collectivités territoriales",
+            "Immigration",
+            "Justice et Libertés",
+            "Travail",
+            "Santé",
+            "Démocratie"
+        ];
+
+        //on va y mettre nos objets subject pour pouvoir les utiliser
+        $subjectsArray = [];
+
+        foreach ($subjects as $name){
+            $subject = new Subject();
+            $subject->setName($name);
+            $this->em->persist($subject);
+
+            $subjectsArray[]= $subject;
+        }
 
         for($i=0; $i<100; $i++){
             $question = new Question();
@@ -51,8 +88,16 @@ class FixCommand extends Command
             $question->setSupports($faker->optional(0.5, 0)->numberBetween(0, 9000));
             $question->setCreationDate($faker->dateTimeBetween('- 1 year', 'now') );
 
+            //ajoute entre 1 à 3 sujets
+            $num = mt_rand(1,3);
+            for($b=0; $b < $num; $b++){
+                $s = $faker->randomElement($subjectsArray);
+                $question->addSubject($s);
+            }
+
             $this->em->persist($question);
         }
+
 
         $this->em->flush();
         $io->success("goody, goody");

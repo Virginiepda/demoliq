@@ -6,13 +6,15 @@
 
     <div class="question">
         <div>
+            <h1>{{ question.title }}</h1>
 
-    <h3>{{ question.title }}</h3>
-            <p class="date">Date de création:</p>
+            {#je veux afficher les sujets, comme il s'agit d'un tableau, je devrais faire une boucle.
+            Mais comme nous avons créer un toString dans la class, je peux utiliser join auquel j'indique ce que je veux
+            mettre comme symbole entre chaque sujet #}
+
+            <h5>{{ question.subjects |join('|') }}</h5>
             <p>{{ question.creationDate |date('d-m-Y H:i:s') }}</p>
-            <p>Description:</p>
             <p>{{ question.description | nl2br }}</p>
-            <p class="supports">Supports:</p>
             <p>{{ question.supports }}</p>
     </div>
     <div>
@@ -32,9 +34,9 @@
     <div class="messages">
         {% for message in messages %}
             <div class="message">
-                <p class="content"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ message.content | nl2br }}</p>
+                <p class="content"><img class="marteau" src="{{ asset('img/baseline-gavel-24px.svg') }}">{{ message.content | nl2br }}</p>
                 <p class="date">{{ message.dateCreated |date('d-m-Y')}}</p>
-                <p class="claps">{{ message.claps }}</p>
+
 
             </div>
         {% endfor %}

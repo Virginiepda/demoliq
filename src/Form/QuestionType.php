@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Question;
+use App\Entity\Subject;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,6 +27,13 @@ class QuestionType extends AbstractType
             ->add('title', TextType::class,
                 ['label' => "Votre question"])
             ->add('description', TextareaType::class)
+            ->add('subjects', EntityType::class, [
+                'multiple'=>true,           //multiple indique qu'on peut avoir plusieurs choix
+                'expanded'=>true,
+                'class'=>Subject::class    //on précise à quelle classe correspond le subjects ,
+                                            // ici, on fait un echo. Du coup, afin d'afficher
+                                            // les noms, je vais ajouter un toString à la classe Subject,
+            ])
 
         ;
     }

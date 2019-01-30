@@ -33,12 +33,15 @@ class QuestionController extends AbstractController
 
         //on va plutôt faire ceci
         //équivaut à SELECT * FROM question WHERE status = 'debating' ORDER BY supports DESC LIMIT 1000
+        //cette méthode n'étant plus valable, nous allons créer notre propre requête
         $questions = $questionRepository->findBy(
             ['status' => 'debating'], //where
             ['supports' => 'DESC'], //order by
             1000, //limit
             0 //offset
         );
+
+
 
         //dd($questions);
 
@@ -124,14 +127,19 @@ class QuestionController extends AbstractController
         //récupère les 200 messages les plus récents
         //si c'est findALl, on ne peut pas controler le tri, c'est trié du plus récent au plus ancien
         //si on veut trier comme on veut, il est préférable de faire un findby
-        $messages=$messageRepository->findBy(
-            [
-                'isPublished' => true,
-                'question' =>$question
-            ],
-            ['dateCreated' =>'DESC'],
-            200
-        );
+//        $messages=$messageRepository->findBy(
+//            [
+//                'isPublished' => true,
+//                'question' =>$question
+//            ],
+//            ['dateCreated' =>'DESC'],
+//            200
+//        );
+
+
+        //maintenant qu'on a fait notre propre requête qu'on a mis dans le QUestionRepository, on va l'appeler
+
+        $messages= $messageRepository->findListQuestionsQB();
 
         return $this->render('question/detail.html.twig',[
             'question'=>$question,
