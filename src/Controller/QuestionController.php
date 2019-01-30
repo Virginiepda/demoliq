@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\Question;
+use App\Form\MessageType;
 use App\Form\QuestionType;
+use App\Utils\Helper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
@@ -45,6 +49,8 @@ class QuestionController extends AbstractController
     }
 
 
+
+
     //l'id indiqué ici est le nom de ce qu'on veut qui apparaisse dans l'url.
     //on va utiliser ce nom pour le passer en argument dans la fonction. Il faut que ce soit appelé pareil
     //le {id} dans l'url est appelé un jocker (placeholder). On peut tout à fait appeler autre chose, comme le titre
@@ -53,15 +59,16 @@ class QuestionController extends AbstractController
     /**
      * @Route("/questions/{id}", name="question_detail", requirements={"id" : "\d+"})
      */
-    public function detail(int $id)
+    public function detail(int $id, Request $request)
     {
        $questionRepository=$this->getDoctrine()->getRepository(Question::class);
+
+
 
        //option 1 - findOneBy qui permet d'afficher la ligne spécifiquement l'id
 //       $question = $questionRepository->findOneBy([
 //           'id' => $id
 //       ]);
-
 
         //option 2 - find qui prend directement en argument l'id
         $question = $questionRepository->find($id);
@@ -72,8 +79,65 @@ class QuestionController extends AbstractController
             throw $this->createNotFoundException("cette question n'existe pas");
         }
 
+
+
+
+
+        // créé une instance de message à associer au formulaire
+        $message = new Message();
+
+        //on va tout de suite le rattacher à la question. Il a maintenant un objet question associé
+        $message->setQuestion($question);
+
+        //créer le formulaire
+        $messageForm= $this->createForm(MessageType::class, $message);
+
+        //récuperer les données présentes dans la requête et les injecter dans le protected function dispatchMessage($message): Envelope
+//NE PAS OUBLIER D'AJOUTER UN CONSTRUCTEUR POUR INITIALISER LES VARIABLES PAR DEFAUT: CLAPS, DATE ET ISPUBLISHED
+
+        $messageForm->handleRequest($request);
+
+        //si le formulaire est soumis et valide
+        //récupérer l'entitymanager
+        //sauvegarder l'instance
+        //executer
+        if($messageForm->isSubmitted() && $messageForm->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($message);
+            $em->flush();
+
+        //créer un message protected function addFlash(string $type, string $message)
+            $this->addFlash('info', 'Merci pour votre participation !');
+
+            //redirige vers la page actuelle (pour vider le message)
+            //ainsi tout est effacé, le POst n'est plus engagé et ainsi la personne ne peut plus reposter une
+            //deuxième fois le même formulaire
+            return $this->redirectToRoute('question_detail', ['id'=> $question->getId()] );
+        }
+
+
+        //    recupère le message repository
+
+        $messageRepository=$this->getDoctrine()->getRepository(Message::class);
+
+        //récupère les 200 messages les plus récents
+        //si c'est findALl, on ne peut pas controler le tri, c'est trié du plus récent au plus ancien
+        //si on veut trier comme on veut, il est préférable de faire un findby
+        $messages=$messageRepository->findBy(
+            [
+                'isPublished' => true,
+                'question' =>$question
+            ],
+            ['dateCreated' =>'DESC'],
+            200
+        );
+
         return $this->render('question/detail.html.twig',[
-            'question'=>$question
+            'question'=>$question,
+            'message'=>$message,
+            'messages'=>$messages,
+            'messageForm'=>$messageForm->createView()
         ]);
 
         //on peut aussi utiliser compact() en mettant en argument les variables qu'on veut passer à la vue
@@ -139,6 +203,9 @@ class QuestionController extends AbstractController
         //$em =flush();
     }
 
+
+
+//
 
 
 }

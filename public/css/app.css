@@ -6,6 +6,9 @@ body{
     font-family: "Open Sans";
 }
 
+main{
+    padding:40px;
+}
 
 .header{
     display:flex;
@@ -58,7 +61,16 @@ a{
     color:black;
 }
 
-div.question{
-    padding:40px;
+div.question, form{
+
     border-bottom:1px solid rgba(132,23,23,0.5)
+}
+
+div.question, div.message-form, div.messages{
+    padding-top:20px;
+    padding-bottom: 20px;
+}
+
+form{
+    padding-bottom: 40px;
 }

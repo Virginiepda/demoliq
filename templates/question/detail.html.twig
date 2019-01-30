@@ -11,13 +11,33 @@
             <p class="date">Date de création:</p>
             <p>{{ question.creationDate |date('d-m-Y H:i:s') }}</p>
             <p>Description:</p>
-            <p>{{ question.description }}</p>
+            <p>{{ question.description | nl2br }}</p>
             <p class="supports">Supports:</p>
             <p>{{ question.supports }}</p>
     </div>
     <div>
         <a href="#" class="btn btn-info">Voter</a>
     </div>
+    </div>
+    <div class="message-form">
+    {{ form_start(messageForm) }}
+
+        {{ form_widget(messageForm) }}
+
+        <button class="btn btn-info">Envoyer !</button>
+
+     {{ form_end(messageForm) }}
+
+    </div>
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message">
+                <p class="content"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ message.content | nl2br }}</p>
+                <p class="date">{{ message.dateCreated |date('d-m-Y')}}</p>
+                <p class="claps">{{ message.claps }}</p>
+
+            </div>
+        {% endfor %}
     </div>
 
 
