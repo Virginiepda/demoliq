@@ -115,3 +115,14 @@ img.marteau{
 div.message{
     padding-bottom:20px;
 }
+
+
+div.formulaire{
+    width:50%;
+    margin:auto;
+}
+
+input.form-control{
+    margin-top:15px;
+    margin-bottom:15px;
+}

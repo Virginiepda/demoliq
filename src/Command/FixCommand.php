@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Question;
 use App\Entity\Subject;
+use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,6 +36,8 @@ class FixCommand extends Command
         //mais on duplique toujours les mêmes données, du coup , on va utiliser la librairie faker
 
         $faker = \Faker\Factory::create();
+
+        $io->text("truncating all tables....");
 
         $conn=$this->em->getConnection();
         //désactive la vérification des clés étrangères
@@ -69,6 +72,8 @@ class FixCommand extends Command
             "Démocratie"
         ];
 
+        $io->text("now loading all fixtures...");
+
         //on va y mettre nos objets subject pour pouvoir les utiliser
         $subjectsArray = [];
 
@@ -94,6 +99,20 @@ class FixCommand extends Command
                 $s = $faker->randomElement($subjectsArray);
                 $question->addSubject($s);
             }
+
+
+            //ajoute des messages sur les questions
+            $messageNumber = mt_rand(0,20);
+            for ($m = 0; $m < $messageNumber; $m++){
+                $message = new Message();
+                $message->setQuestion($question);
+                $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
+                $message->setDateCreated($faker->dateTimeBetween($question->getCreationDate()));
+                $message->setIsPublished($faker->boolean(95));
+                $message->setContent($faker->paragraphs($nb = mt_rand(1,3), $asText = true));
+                $this->em->persist($message);
+            }
+
 
             $this->em->persist($question);
         }

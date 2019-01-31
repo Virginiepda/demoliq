@@ -29,8 +29,10 @@
                 <a class="nav-link active" href="{{ path('home') }}">Accueil</a>
                 <a class="nav-link" href="{{ path('question_add') }}">Soumettre une question</a>
                 <a class="nav-link" href="{{ path('question_list') }}">Débattre</a>
-                <a class="nav-link" href="#">Débattu</a>
+                <a class="nav-link" href="{{ path('closed-question_list') }}">Débattu</a>
                 <a class="nav-link" href="#">Voté</a>
+                <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                <a class="nav-link" href="{{ path('app_register') }}">S'enregistrer</a>
             </nav>
 
         </header>

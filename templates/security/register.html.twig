@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+ {% block title %}DemoLiquide | Enregistrement{% endblock %}
+
+{% block content %}
+
+    <h1>Enregistrement</h1>
+
+
+    {{ form_start(registerForm) }}
+
+    {#affiche les champs du formulaire#}
+    {{ form_widget(registerForm, {'attr':
+        {'novalidate':'novalidate'}}) }}
+    <button class="btn btn-info">Envoyer !</button>
+    {#ferme la balise form#}
+    {{ form_end(registerForm) }}
+
+    {{ form(registerForm) }}
+
+
+
+{% endblock %}

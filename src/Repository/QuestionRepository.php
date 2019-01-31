@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -26,17 +27,20 @@ class QuestionRepository extends ServiceEntityRepository
         //on va faire un peu comme avec SQL
         //il y a de la doc sur dql dans Doctrine
         //je ne fais pas un SELECT FROM de ma table, mais de ma CLASSE
-        $dql = "SELECT q , s
+        $dql = "SELECT q , s, m
                 FROM App\Entity\Question q
                 JOIN q.subjects s
+                LEFT JOIN q.messages m
                 WHERE q.status = 'debating'
-                ORDER BY q.dateCreated DESC";
+                ORDER BY q.creationDate DESC";
 
         $query = $this->getEntityManager()->createQuery($dql);
         $query ->setMaxResults(200);
-        $questions = $query->getResult();
+        $query ->setFirstResult(0);
 
-        return $questions;
+        $paginator = new Paginator($query);
+
+        return $paginator;
     }
 
 
@@ -49,8 +53,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q');
 
         $qb ->andWhere('q.status = :status')
-            ->orderBy('q.dateCreated', 'DESC')
+            ->orderBy('q.creationDate', 'DESC')
             ->join('q.subjects', 's')
+            ->leftJoin('q.messages', 'm')
             ->addSelect('s')
             ->setParameter(':status', 'debating') //je précise à quoi correspond le :status, comme en php pur
             ->setFirstResult(0)
@@ -58,9 +63,9 @@ class QuestionRepository extends ServiceEntityRepository
 
 
         $query = $qb->getQuery();
-        $questions = $query->getResult();
+        $paginator = new Paginator($query);
 
-        return $questions;
+        return $paginator;
     }
 
 
@@ -92,4 +97,24 @@ class QuestionRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function findClosedQuestions()
+    {
+        $qb = $this->createQueryBuilder('q');
+
+        $qb ->andWhere('q.status = :status')
+            ->orderBy('q.creationDate', 'DESC')
+            ->join('q.subjects', 's')
+            ->leftJoin('q.messages', 'm')
+            ->addSelect('s')
+            ->setParameter(':status', 'closed') //je précise à quoi correspond le :status, comme en php pur
+            ->setFirstResult(0)
+            ->setMaxResults(200);
+
+        $query = $qb->getQuery();
+        $paginator = new Paginator($query);
+
+        return $paginator;
+    }
 }

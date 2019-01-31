@@ -26,7 +26,7 @@ class QuestionController extends AbstractController
     {
     //il créé une instance de notre classe, pour aller chercher les infos dans la base
         //il nous permet de faire des SELECT
-        $questionRepository=$this->getDoctrine()->getRepository(Question::class);
+//        $questionRepository=$this->getDoctrine()->getRepository(Question::class);
         //$questions = $questionRepository->findAll(); //ça retourne un tableau d'objets question
 
 
@@ -34,19 +34,40 @@ class QuestionController extends AbstractController
         //on va plutôt faire ceci
         //équivaut à SELECT * FROM question WHERE status = 'debating' ORDER BY supports DESC LIMIT 1000
         //cette méthode n'étant plus valable, nous allons créer notre propre requête
-        $questions = $questionRepository->findBy(
-            ['status' => 'debating'], //where
-            ['supports' => 'DESC'], //order by
-            1000, //limit
-            0 //offset
-        );
+//        $questions = $questionRepository->findBy(
+//            ['status' => 'debating'], //where
+//            ['supports' => 'DESC'], //order by
+//            1000, //limit
+//            0 //offset
+//        );
 
+        $questionRepository = $this->getDoctrine()->getRepository(Question::class);
 
+//voici la méthode que nous avons créé dans le QuestionRepository nous permet de faire des SELECT
+        $questions = $questionRepository->findListQuestions();
 
         //dd($questions);
 
 //pour passer les arguments dans twig afin de pouvoir les afficher, on les passe dans la fonction render en 2ème argument
         return $this->render('question/list.html.twig', [
+            "questions" => $questions,
+        ]);
+    }
+
+    /**
+     * @Route("/questions/fermées", name="closed-question_list", methods={"GET", "POST"})
+     */
+    public function listClosedQuestion()
+    {
+        $questionRepository = $this->getDoctrine()->getRepository(Question::class);
+
+//voici la méthode que nous avons créé dans le QuestionRepository nous permet de faire des SELECT
+        $questions = $questionRepository->findClosedQuestions();
+
+        //dd($questions);
+
+//pour passer les arguments dans twig afin de pouvoir les afficher, on les passe dans la fonction render en 2ème argument
+        return $this->render('question/list-closed.html.twig', [
             "questions" => $questions,
         ]);
     }
@@ -127,19 +148,17 @@ class QuestionController extends AbstractController
         //récupère les 200 messages les plus récents
         //si c'est findALl, on ne peut pas controler le tri, c'est trié du plus récent au plus ancien
         //si on veut trier comme on veut, il est préférable de faire un findby
-//        $messages=$messageRepository->findBy(
-//            [
-//                'isPublished' => true,
-//                'question' =>$question
-//            ],
-//            ['dateCreated' =>'DESC'],
-//            200
-//        );
+        $messages=$messageRepository->findBy(
+            [
+                'isPublished' => true,
+                'question' =>$question
+            ],
+            ['dateCreated' =>'DESC'],
+            200
+        );
 
 
-        //maintenant qu'on a fait notre propre requête qu'on a mis dans le QUestionRepository, on va l'appeler
 
-        $messages= $messageRepository->findListQuestionsQB();
 
         return $this->render('question/detail.html.twig',[
             'question'=>$question,
