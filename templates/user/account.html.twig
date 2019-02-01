@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+ {% block title %}DemoLiquide | Mon compte{% endblock %}
+
+{% block content %}
+
+    <h1>Mon compte</h1>
+
+    <div class="username">
+        <p>Username: {{ app.user.username }}</p>
+
+    </div>
+    <div class="email">
+        <p>Email: {{ app.user.email }}</p>
+
+    </div>
+    <div class="secu">
+        <p>Social Security Number: {{ app.user.socialSecurityNumber }}</p>
+
+    </div>
+
+    <div>
+        <a href="#" class="btn btn-info">Modifier</a>
+    </div>
+
+{% endblock %}

@@ -17,10 +17,14 @@
             <p>{{ question.description | nl2br }}</p>
             <p>{{ question.supports }}</p>
     </div>
+        {% if app.user %}
     <div>
-        <a href="#" class="btn btn-info">Voter</a>
+        <a href="#" class="btn btn-info" >Voter</a>
     </div>
+        {% endif %}
     </div>
+
+    {% if app.user %}
     <div class="message-form">
     {{ form_start(messageForm) }}
 
@@ -31,13 +35,20 @@
      {{ form_end(messageForm) }}
 
     </div>
+        {% else %}
+            <div>
+            <a class="nav-link" href="{{ path('app_login') }}">Connecter-vous pour faire un commentaire</a>
+            </div>
+    {% endif %}
     <div class="messages">
         {% for message in messages %}
             <div class="message">
                 <p class="content"><img class="marteau" src="{{ asset('img/baseline-gavel-24px.svg') }}">{{ message.content | nl2br }}</p>
                 <p class="date">{{ message.dateCreated |date('d-m-Y')}}</p>
-
-
+                <div class="claps">
+                    <div class="clap-btn" data-url="{{ path('api_clap_post', {'id': message.id}) }}">👏</div>
+                    <div class="clap-num">{{ message.claps }}</div>
+                </div>
             </div>
         {% endfor %}
     </div>

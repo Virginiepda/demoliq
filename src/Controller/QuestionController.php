@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Message;
 use App\Entity\Question;
+use App\Entity\User;
 use App\Form\MessageType;
 use App\Form\QuestionType;
 use App\Utils\Helper;
+use PhpParser\Node\Stmt\Throw_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Envelope;
@@ -184,6 +186,17 @@ class QuestionController extends AbstractController
      */
     public function create(Request $request)
     {
+
+        //ON peut faire une vérification sur le role du user ici
+        //option 1
+//        if($this->isGranted("ROLE_USER")){
+//            Throw $this->createAccessDeniedException("pas le droit");
+//        }
+//                //option2
+//        $this->denyAccessUnlessGranted("ROLE_USER");
+
+
+
         //ça crée une instance de Question, ça hydrate la classe et ça renvoie ensuite en BDD
         $question = new Question();
 
@@ -197,6 +210,14 @@ class QuestionController extends AbstractController
         $questionForm->handleRequest($request);
 
         if($questionForm->isSubmitted() && $questionForm->isValid()){
+
+            //méthode qui complète twig ayant caché le formulaire.
+            //seul l'utilisateur connecté peut poster un commentaire
+
+            $this->denyAccessUnlessGranted("ROLE_USER");
+
+
+
             //on va chercher l'EntityManager
             $em = $this->getDoctrine()->getManager();  //on peut aussi le passer en argument de la fonction
             //public function create (EntityManager Manager)

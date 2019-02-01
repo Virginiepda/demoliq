@@ -32,6 +32,8 @@ class SecurityController extends AbstractController
      */
     public function register(UserPasswordEncoderInterface $encoder, Request $request)
     {
+        //si on veut vérifier si le user est connecté    $this->getUser();
+
         $user = new User();
 
         $registerForm = $this->createForm(RegisterType::class, $user);
@@ -54,6 +56,8 @@ class SecurityController extends AbstractController
             //on execute la requête
             $em->flush();
 
+            //si on souhaite déclencher l'envoi d'un email, ce serait ici
+
             $this->addFlash('info', 'Bienvenue sur notre site !');
 
             //on redirige (deux arguments : nom de la route et la valeur de l'argument que la route prend
@@ -66,5 +70,13 @@ class SecurityController extends AbstractController
         ]);
 
     }
+
+    /**
+     * @Route("/deconnexion", name="app_logout")
+     */
+    public function logout(){}
+
+
+
 
 }
